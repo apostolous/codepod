@@ -1,5 +1,9 @@
 [meta]
+name="Docker"
 
-
-[commands]
-exists="command -v docker"
+[commands_template]
+exists="/bin/which -v /snap/bin/docker"
+status="/snap/bin/docker inspect -f '.{{.State.Status}}' {ID}"
+create="/snap/bin/docker run --name {ID} csg-dev"
+graceful_delete="/snap/bin/docker rm {ID}"
+forceful_delete="/snap/bin/docker rm --force {ID}"

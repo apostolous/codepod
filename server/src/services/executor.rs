@@ -5,8 +5,9 @@ pub struct Executor {}
 impl Executor {
   /// Spawns a new shell and executes a command.
   pub fn exec(cmd: &str) -> io::Result<Output> {
-    Command::new("sh")
-      .args(cmd.split_ascii_whitespace())
+    let cmd = cmd.split_ascii_whitespace().collect::<Vec<&str>>();
+    Command::new(cmd[0])
+      .args(&cmd[1..])
       .output()
   }
 }
