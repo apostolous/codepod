@@ -1,36 +1,29 @@
 import argparse
+import tomllib
+import subprocess
+from typing import TypedDict
 
-def compile(ver):
-  print("compiling " + ver())
+class CompileTable(TypedDict):
+  path: str
+  command: str
 
-def admin():
-  return "adm"
+def compile(ct: CompileTable):
+  command = ct["command"]
+  path = ct["path"]
+  subprocess.call(command, cwd=path, shell=True)
 
-def client():
-  return "cli"
-
-def server():
-  return "serv"
+def load_toml():
+  with open("compile.toml", "rb") as f:
+    return tomllib.load(f)
 
 def main():
   print("CodePods Compiler Service")
 
-  parser = argparse.ArgumentParser(prog="CodePods")
+  print("Loading compile.toml...")
+  compile_data = load_toml()
 
-  parser.add_argument("-a", "--admin", action="store_true", required=False)
-  parser.add_argument("-c", "--client", action="store_true", required=False)
-  parser.add_argument("-s", "--server", action="store_true", required=False)
-
-  args = parser.parse_args();
-
-  if args.admin:
-    compile(admin)
-  
-  if args.client:
-    compile(client)
-
-  if args.server:
-    compile(server)
+  for attr in compile_data.items():
+    compile(attr[1])
 
 
 if __name__ == "__main__":

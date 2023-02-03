@@ -1,8 +1,11 @@
 [admin]
-command=""
+path="./admin"
+command="cargo build"
 
 [client]
-command=""
+path="./client"
+command="cargo build"
 
 [server]
-command=""
+path="./server"
+command="cargo build"
