@@ -1,0 +1,5 @@
+[meta]
+
+
+[commands]
+exists="command -v docker"
