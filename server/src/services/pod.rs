@@ -17,6 +17,9 @@ pub struct Pod {
 }
 
 impl Pod {
+    /// Note: does NOT create a pod container. Simply creates the data object.
+    /// 
+    /// To create an OS instance of a Pod, please go through a `strategy`.
     pub fn new(id: &str, name: &str, commands: &StrategyCommandsTemplate) -> Self {
         Self {
             id: id.to_string(),

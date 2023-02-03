@@ -8,3 +8,9 @@ It contains and serves:
 - a REST API to work with all of these things.
 
 And most importantly, it *orchestrates your Pods*.
+
+## Libraries
+
+- SQLite (Database)
+- SeaQL (Database Management System)
+- Rocket (HTTP)

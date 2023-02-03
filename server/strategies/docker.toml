@@ -2,7 +2,7 @@
 name="Docker"
 
 [commands_template]
-exists="/bin/which -v /snap/bin/docker"
+exists="/bin/which /snap/bin/docker"
 status="/snap/bin/docker inspect -f '.{{.State.Status}}' {ID}"
 create="/snap/bin/docker run --name {ID} csg-dev"
 graceful_delete="/snap/bin/docker rm {ID}"

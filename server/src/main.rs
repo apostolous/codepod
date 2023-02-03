@@ -1,21 +1,24 @@
 mod services;
 
-fn main() {
+#[macro_use]
+extern crate rocket;
+
+#[get("/")]
+fn index() -> String {
     let strategy_files =
         std::fs::read_dir("./strategies").expect("Strategies subdirectory not found.");
 
-    let strategies = strategy_files
+    let binaries = strategy_files
         .map(|s| s.unwrap().path().into_os_string().into_string().unwrap())
-		.map(|s| services::strategy::Strategy::new_from_file(&s).unwrap())
-		.collect::<Vec<_>>();
+        .map(|s| services::strategy::Strategy::new_from_file(&s).unwrap())
+        .map(|s| {
+            s.check_binary_exists().unwrap()
+        }).collect::<Vec<String>>();
 
-    for strategy in strategies {
-        let out = strategy.check_binary_exists();
+    binaries[0].clone()
+}
 
-        match out {
-            Ok(x) => println!("Strategy Check Output '{}'" , std::str::from_utf8(&x.stdout).unwrap()),
-            Err(e) => println!("Bad {:?}", e)
-        }
-    }
-
+#[launch]
+fn rocket() -> _ {
+    rocket::build().mount("/", routes![index])
 }

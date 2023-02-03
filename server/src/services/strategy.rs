@@ -61,13 +61,16 @@ pub struct Strategy {
 /// The difference between a Strategy and a Pod
 /// A Strategy is merely a parsed version of a `strategy`, while a `Pod` is an instantiation of a `strategy`.
 impl Strategy {
-    pub fn check_binary_exists(&self) -> Result<Output, std::io::Error> {
+    /// Checks to see if the binary exists and returns an IO error if it does not.
+    /// Returns the value of the `exists` specification of the strategy.
+    pub fn check_binary_exists(&self) -> Result<String, std::io::Error> {
         let exists = self
             .commands_template
             .exists
             .clone()
             .unwrap_or(format!("command -v {}", self.commands_template.status));
-        Executor::exec(&exists)
+        let out = Executor::exec(&exists)?;
+        Ok(std::str::from_utf8(&out.stdout).unwrap_or("").to_string())
     }
 
     pub fn new_from_file(path: &str) -> Result<Self, std::io::Error> {
